@@ -11,6 +11,7 @@ export default function Nav({ token, onLogin }) {
 
     const handleLogoutClick = () => {
         onLogin('')
+        navigate('/')
     }
 
     return (

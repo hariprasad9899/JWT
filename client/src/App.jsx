@@ -5,6 +5,7 @@ import Nav from './components/Nav'
 import Shakes from './components/Shakes'
 import Login from './components/Login'
 import { useState } from 'react'
+import Admin from './components/Admin'
 
 function App() {
     const [token, setToken] = useState('')
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/login" element={<Login onLogin={handleUserLogin} />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/shakes" element={<Shakes />} />
+                <Route path="/admin" element={<Admin />} />
             </Routes>
         </div>
     )

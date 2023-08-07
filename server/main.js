@@ -35,6 +35,24 @@ app.post('/login', (req, res) => {
     return res.json({ jwtSessionToken })
 })
 
+app.post('/admin', (req, res) => {
+    const jwtBearerToken = req.headers.authorization
+    console.log(jwtBearerToken)
+    const token = jwtBearerToken.split(' ')[1]
+    if (!token) {
+        return res.status(401).json({ authorized: false })
+    }
+    try {
+        const decoded = jwt.verify(token, secretKey)
+        if (decoded.userRole !== 'admin') {
+            return res.status(401).json({ authorized: false })
+        }
+        return res.json({ authorized: true })
+    } catch (err) {
+        return res.json({ authorized: true })
+    }
+})
+
 app.listen(port, () => {
     console.log('app is running on the port 4000')
 })
