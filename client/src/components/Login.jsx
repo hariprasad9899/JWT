@@ -24,14 +24,12 @@ export default function Login({ onLogin }) {
             },
             body: JSON.stringify({ username, password }),
         })
-        const data = await response.json()
-        if (data.jwtSessionToken) {
-            onLogin(data.jwtSessionToken)
+        const { jwtSessionToken, jwtRefreshToken } = await response.json()
+        if (jwtSessionToken && jwtRefreshToken) {
+            onLogin(jwtSessionToken, jwtRefreshToken)
             navigate('/')
         }
     }
-
-    
 
     return (
         <div className="login-page p-3">
@@ -54,7 +52,7 @@ export default function Login({ onLogin }) {
                     onChange={handlePassword}
                     type="password"
                 ></input>
-                <input className="form-control mt-2 mb-2" id="username" type="submit" onClick={handleSubmit}></input>
+                <input className="form-control mt-2 mb-2" id="submit" type="submit" onClick={handleSubmit}></input>
             </form>
         </div>
     )

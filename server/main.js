@@ -18,7 +18,11 @@ const users = [
 ]
 
 const generateSessionToken = (userId, userRole) => {
-    return jwt.sign({ userId, userRole }, secretKey)
+    return jwt.sign({ userId, userRole }, secretKey, { expiresIn: '1m' })
+}
+
+const generateRefreshToken = (userId, userRole) => {
+    return jwt.sign({ userId, userRole }, secretKey, { expiresIn: '7d' })
 }
 
 app.post('/login', (req, res) => {
@@ -32,24 +36,36 @@ app.post('/login', (req, res) => {
     }
 
     const jwtSessionToken = generateSessionToken(user.id, user.role)
-    return res.json({ jwtSessionToken })
+    const jwtRefreshToken = generateRefreshToken(user.id, user.role)
+    return res.json({ jwtSessionToken, jwtRefreshToken })
 })
 
+// protected route
 app.post('/admin', (req, res) => {
     const jwtBearerToken = req.headers.authorization
-    console.log(jwtBearerToken)
     const token = jwtBearerToken.split(' ')[1]
     if (!token) {
-        return res.status(401).json({ authorized: false })
+        return res.status(401).json({ authorized: false, tokenExpired: false })
     }
     try {
         const decoded = jwt.verify(token, secretKey)
         if (decoded.userRole !== 'admin') {
-            return res.status(401).json({ authorized: false })
+            return res.status(401).json({ authorized: false, tokenExpired: false })
         }
         return res.json({ authorized: true })
     } catch (err) {
-        return res.json({ authorized: true })
+        return res.json({ authorized: false, tokenExpired: true })
+    }
+})
+
+app.post('/refresh', (req, res) => {
+    const { refreshToken } = req.body
+    try {
+        const decoded = jwt.verify(refreshToken, secretKey)
+        const jwtSessionToken = jwt.sign({ userId: decoded.userId, userRole: decoded.userRole }, secretKey)
+        return res.json({ jwtSessionToken })
+    } catch (err) {
+        return res.status(401).json({ message: 'Invalid json token' })
     }
 })
 

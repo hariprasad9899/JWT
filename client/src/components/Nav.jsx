@@ -3,14 +3,14 @@ import HeadingElement from '../utils/HeadingElement'
 import '../styles/Nav.scss'
 import { useNavigate } from 'react-router-dom'
 
-export default function Nav({ token, onLogin }) {
+export default function Nav({ sessionToken, onLogout }) {
     const navigate = useNavigate()
     const handleLoginClick = () => {
         navigate('/login')
     }
 
     const handleLogoutClick = () => {
-        onLogin('')
+        onLogout()
         navigate('/')
     }
 
@@ -20,7 +20,7 @@ export default function Nav({ token, onLogin }) {
                 <HeadingElement>Thick Shake Factory</HeadingElement>
             </div>
             <div className="login-section">
-                {!token ? (
+                {!sessionToken ? (
                     <button className="btn btn-primary" onClick={handleLoginClick}>
                         Login
                     </button>

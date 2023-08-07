@@ -3,12 +3,12 @@ import '../styles/Home.scss'
 import HeadingElement from '../utils/HeadingElement'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-export default function Home({ adminAccess }) {
+export default function Home() {
     const navigate = useNavigate()
 
     const handleShakeClick = () => {
-        const token = localStorage.getItem('token')
-        if (!token) {
+        const sessionToken = localStorage.getItem('sessionToken')
+        if (!sessionToken) {
             navigate('/login')
         } else {
             navigate('/shakes')
@@ -16,8 +16,8 @@ export default function Home({ adminAccess }) {
     }
 
     const handleAdminClick = () => {
-        const token = localStorage.getItem('token')
-        if (!token) {
+        const sessionToken = localStorage.getItem('sessionToken')
+        if (!sessionToken) {
             navigate('/login')
         } else {
             navigate('/admin')
