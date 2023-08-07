@@ -4,14 +4,22 @@ import { Route, Routes } from 'react-router'
 import Nav from './components/Nav'
 import Shakes from './components/Shakes'
 import Login from './components/Login'
+import { useState } from 'react'
 
 function App() {
+    const [token, setToken] = useState('')
+
+    const handleUserLogin = (newToken) => {
+        setToken(newToken)
+        localStorage.setItem('token', newToken)
+    }
+
     return (
         <div className="app">
-            <Nav />
+            <Nav token={token} onLogin={handleUserLogin} />
             <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<Home token={token} />} />
+                <Route path="/login" element={<Login onLogin={handleUserLogin} />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/shakes" element={<Shakes />} />
             </Routes>

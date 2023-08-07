@@ -18,7 +18,7 @@ const users = [
 ]
 
 const generateSessionToken = (userId, userRole) => {
-    return jwt.sign({ userId, userRole })
+    return jwt.sign({ userId, userRole }, secretKey)
 }
 
 app.post('/login', (req, res) => {
@@ -32,7 +32,7 @@ app.post('/login', (req, res) => {
     }
 
     const jwtSessionToken = generateSessionToken(user.id, user.role)
-    return res.json({})
+    return res.json({ jwtSessionToken })
 })
 
 app.listen(port, () => {

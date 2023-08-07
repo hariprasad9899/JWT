@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import '../styles/Login.scss'
+import { useNavigate } from 'react-router'
 
-export default function Login() {
+export default function Login({ onLogin }) {
     const [username, setUserName] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate()
 
     const handleUserName = (e) => {
         setUserName(e.target.value)
@@ -13,8 +15,20 @@ export default function Login() {
         setPassword(e.target.value)
     }
 
-    const handleLogin = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        const response = await fetch('http://localhost:4000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        })
+        const data = await response.json()
+        if (data.jwtSessionToken) {
+            onLogin(data.jwtSessionToken)
+            navigate('/')
+        }
     }
 
     return (

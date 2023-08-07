@@ -1,3 +1,8 @@
 .home-page {
     background-color: #fff9de;
+    .click-here {
+        &:hover {
+            cursor: pointer;
+        }
+    }
 }
